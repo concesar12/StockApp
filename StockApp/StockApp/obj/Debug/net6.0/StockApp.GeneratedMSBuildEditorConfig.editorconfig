@@ -14,3 +14,7 @@ build_property.SupportLocalizedComponentNames =
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = D:\Cesar\Udemy\StocksApp\StockApp\StockApp\StockApp
 build_property._RazorSourceGeneratorDebug = 
+
+[D:/Cesar/Udemy/StocksApp/StockApp/StockApp/StockApp/Views/Trade/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhZGVcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
