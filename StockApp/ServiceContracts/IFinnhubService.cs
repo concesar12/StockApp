@@ -1,4 +1,4 @@
-﻿namespace StockApp.ServiceContracts
+﻿namespace ServiceContracts
 {
     public interface IFinnhubService
     {
