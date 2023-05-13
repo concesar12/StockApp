@@ -1,0 +1,12 @@
+C:\Projects\StockApp\StockApp\ServiceContracts\bin\Debug\net6.0\ServiceContracts.deps.json
+C:\Projects\StockApp\StockApp\ServiceContracts\bin\Debug\net6.0\ServiceContracts.dll
+C:\Projects\StockApp\StockApp\ServiceContracts\bin\Debug\net6.0\ServiceContracts.pdb
+C:\Projects\StockApp\StockApp\ServiceContracts\obj\Debug\net6.0\ServiceContracts.csproj.AssemblyReference.cache
+C:\Projects\StockApp\StockApp\ServiceContracts\obj\Debug\net6.0\ServiceContracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\StockApp\StockApp\ServiceContracts\obj\Debug\net6.0\ServiceContracts.AssemblyInfoInputs.cache
+C:\Projects\StockApp\StockApp\ServiceContracts\obj\Debug\net6.0\ServiceContracts.AssemblyInfo.cs
+C:\Projects\StockApp\StockApp\ServiceContracts\obj\Debug\net6.0\ServiceContracts.csproj.CoreCompileInputs.cache
+C:\Projects\StockApp\StockApp\ServiceContracts\obj\Debug\net6.0\ServiceContracts.dll
+C:\Projects\StockApp\StockApp\ServiceContracts\obj\Debug\net6.0\refint\ServiceContracts.dll
+C:\Projects\StockApp\StockApp\ServiceContracts\obj\Debug\net6.0\ServiceContracts.pdb
+C:\Projects\StockApp\StockApp\ServiceContracts\obj\Debug\net6.0\ref\ServiceContracts.dll

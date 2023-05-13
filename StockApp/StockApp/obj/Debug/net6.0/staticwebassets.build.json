@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "Hash": "ETRc7aP6nGAR8nsAJOfevloV/Rq8qxuC+WZxGoQUaAs=",
+  "Source": "StockApp",
+  "BasePath": "_content/StockApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "StockApp\\wwwroot",
+      "Source": "StockApp",
+      "ContentRoot": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\",
+      "BasePath": "_content/StockApp",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\Scripts\\FinnhubScript.js",
+      "SourceId": "StockApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\",
+      "BasePath": "_content/StockApp",
+      "RelativePath": "Scripts/FinnhubScript.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Scripts\\FinnhubScript.js"
+    },
+    {
+      "Identity": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\StyleSheet.css",
+      "SourceId": "StockApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\",
+      "BasePath": "_content/StockApp",
+      "RelativePath": "StyleSheet.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\StyleSheet.css"
+    }
+  ]
+}
