@@ -1,7 +1,9 @@
-﻿using StockApp.ServiceContracts;
+﻿using ServiceContracts;
+using Microsoft.Extensions.Configuration;
+using System.Net.Http;
 using System.Text.Json; //for API response
 
-namespace StockApp.Services
+namespace Services
 {
     public class FinnhubService : IFinnhubService
     {
@@ -14,7 +16,7 @@ namespace StockApp.Services
             _configuration = configuration;
         }
 
-        public async Task<Dictionary<string, object>?> GetCompanyProfile(string stockSymbol)
+        public Dictionary<string, object>? GetCompanyProfile(string stockSymbol)
         {
             //by using using, we ensure that the HttpClient instance is disposed of correctly and efficiently,
             //and that any unmanaged resources it has created are released. This helps to prevent potential issues such as memory leaks or socket exhaustion.
@@ -26,7 +28,7 @@ namespace StockApp.Services
                     Method = HttpMethod.Get
                 };
 
-                HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+                HttpResponseMessage httpResponseMessage = httpClient.Send(httpRequestMessage);
 
                 Stream stream = httpResponseMessage.Content.ReadAsStream();
 
@@ -44,7 +46,7 @@ namespace StockApp.Services
             }
         }
 
-        public async Task<Dictionary<string, object>?> GetStockPriceQuote(string stockSymbol) // This is the task that makes the request
+        public Dictionary<string, object>? GetStockPriceQuote(string stockSymbol) // This is the task that makes the request
         {
             using (HttpClient httpClient = _httpClientFactory.CreateClient())
             {
@@ -54,7 +56,7 @@ namespace StockApp.Services
                     Method = HttpMethod.Get
                 };
 
-                HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage); //This is to receive the message
+                HttpResponseMessage httpResponseMessage = httpClient.Send(httpRequestMessage); //This is to receive the message
 
                 Stream stream = httpResponseMessage.Content.ReadAsStream(); // This is to create the stream to read it
 
