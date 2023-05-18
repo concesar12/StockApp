@@ -1,6 +1,7 @@
 ﻿using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
+using Services.Helpers;
 
 namespace Services
 {
@@ -18,12 +19,38 @@ namespace Services
 
         public Task<BuyOrderResponse> CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
         {
-            throw new NotImplementedException();
+            if (buyOrderRequest == null)
+            {
+                throw new ArgumentNullException(nameof(buyOrderRequest));
+            }
+
+            ValidationHelper.ModelValidation(buyOrderRequest);
+
+            BuyOrder buyOrder = buyOrderRequest.ToBuyOrder();
+
+            buyOrder.BuyOrderID = Guid.NewGuid();
+
+            _buyOrders.Add(buyOrder);
+
+            return Task<buyOrder.ToBuyOrderResponse()>;
         }
 
         public Task<SellOrderResponse> CreateSellOrder(SellOrderRequest? sellOrderRequest)
         {
-            throw new NotImplementedException();
+            if (sellOrderRequest == null)
+            {
+                throw new ArgumentNullException(nameof(sellOrderRequest));
+            }
+
+            ValidationHelper.ModelValidation(sellOrderRequest);
+
+            SellOrder sellOrder = sellOrderRequest.ToSellOrder();
+
+            sellOrder.SellOrderID = Guid.NewGuid();
+
+            _sellOrders.Add(sellOrder);
+
+            return Task < sellOrder.ToSellOrderResponse() >;
         }
 
         public Task<List<BuyOrderResponse>?> GetBuyOrders()

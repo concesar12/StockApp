@@ -17,9 +17,9 @@ namespace ServiceContracts.DTO
         public double Price { get; set; }
 
 
-        public BuyOrder ToSellOrder()
+        public SellOrder ToSellOrder()
         {
-            return new BuyOrder { StockSymbol = StockSymbol, StockName = StockName, Price = Price, DateAndTimeOfOrder = DateAndTimeOfOrder, Quantity = Quantity };
+            return new SellOrder { StockSymbol = StockSymbol, StockName = StockName, Price = Price, DateAndTimeOfOrder = DateAndTimeOfOrder, Quantity = Quantity };
         }
     }
 }
