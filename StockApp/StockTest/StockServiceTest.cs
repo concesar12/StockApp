@@ -11,9 +11,10 @@ namespace StockTest
         private readonly IStocksService _stocksService;
         private readonly ITestOutputHelper _testOutputHelper;
 
-        public StockServiceTest()
+        public StockServiceTest(ITestOutputHelper testOutputHelper)
         {
             _stocksService = new StocksService();
+            _testOutputHelper = testOutputHelper;
         }
 
         #region CreateBuyOrder
@@ -24,61 +25,65 @@ namespace StockTest
             BuyOrderRequest? buyOrderRequest = null;
 
             //Act
-            Assert.ThrowsAsync<ArgumentNullException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
-                return _stocksService.CreateBuyOrder(buyOrderRequest);
+                _stocksService.CreateBuyOrder(buyOrderRequest);
             });
         }
 
-        [Fact]
-        public void Buy_Order_Request_Quantity_Zero()
+        [Theory] //Use [Theory] instead of [Fact]; so that, you can pass parameters to the test method
+        [InlineData(0)] //passing parameters to the tet method
+        public void Buy_Order_Request_Quantity_Zero(uint buyOrderQuantity)
         {
             //Arrange
-            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() {Quantity = 0 };
+            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() { StockSymbol = "MSFT", StockName = "Microsoft", Price = 1, Quantity = buyOrderQuantity };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateBuyOrder(buyOrderRequest);
+                _stocksService.CreateBuyOrder(buyOrderRequest);
             });
         }
 
-        [Fact]
-        public void Buy_Order_Request_Quantity_More_Than_Limit()
+        [Theory]
+        [InlineData(100001)]
+        public void Buy_Order_Request_Quantity_More_Than_Limit(uint buyOrderQuantity)
         {
             //Arrange
-            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() { Quantity = 100001 };
+            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() { StockSymbol = "MSFT", StockName = "Microsoft", Price = 1, Quantity = buyOrderQuantity };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateBuyOrder(buyOrderRequest);
+                _stocksService.CreateBuyOrder(buyOrderRequest);
             });
         }
 
-        [Fact]
-        public void Buy_Order_Request_Price_Zero()
+        [Theory]
+        [InlineData(0)]
+        public void Buy_Order_Request_Price_Zero(uint buyOrderPrice)
         {
             //Arrange
-            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() { Price = 0 };
+            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() { StockSymbol = "MSFT", StockName = "Microsoft", Price = buyOrderPrice, Quantity = 1 };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateBuyOrder(buyOrderRequest);
+                _stocksService.CreateBuyOrder(buyOrderRequest);
             });
         }
 
-        [Fact]
-        public void Buy_Order_Request_Price_Over_Limit()
+        [Theory]
+        [InlineData(100001)]
+        public void Buy_Order_Request_Price_Over_Limit(uint buyOrderQuantity)
         {
             //Arrange
-            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() { Price = 100001 };
+            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() { StockSymbol = "MSFT", StockName = "Microsoft", Price = 1, Quantity = buyOrderQuantity };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateBuyOrder(buyOrderRequest);
+                _stocksService.CreateBuyOrder(buyOrderRequest);
             });
         }
 
@@ -86,12 +91,12 @@ namespace StockTest
         public void Buy_Order_Request_Stock_Symbol_Null()
         {
             //Arrange
-            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() { StockSymbol = null };
+            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() { StockSymbol = null, Price = 1, Quantity = 1 };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateBuyOrder(buyOrderRequest);
+                _stocksService.CreateBuyOrder(buyOrderRequest);
             });
         }
 
@@ -99,12 +104,12 @@ namespace StockTest
         public void Buy_Order_Request_Stock_Out_Of_Date()
         {
             //Arrange
-            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() { DateAndTimeOfOrder = DateTime.Parse("2000-01-01") };
+            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest() { StockSymbol = "MSFT", StockName = "Microsoft", DateAndTimeOfOrder = Convert.ToDateTime("1999-12-31"), Price = 1, Quantity = 1 };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateBuyOrder(buyOrderRequest);
+                _stocksService.CreateBuyOrder(buyOrderRequest);
             });
         }
 
@@ -116,17 +121,13 @@ namespace StockTest
                 StockSymbol = "MSFT", DateAndTimeOfOrder = DateTime.Parse("2000-01-01") };
 
             //Act
-            Task<BuyOrderResponse> buy_order_response_from_create = _stocksService.CreateBuyOrder(buyOrderRequest);
-            Task<List<BuyOrderResponse>?> buy_order_list = _stocksService.GetBuyOrders();
+            BuyOrderResponse buy_order_response_from_create = _stocksService.CreateBuyOrder(buyOrderRequest);
+            List<BuyOrderResponse> buy_order_list = _stocksService.GetBuyOrders();
 
             //Assert
-            Assert.True(buy_order_response_from_create.Result.BuyOrderID != Guid.Empty);
-            Assert.Contains(buy_order_response_from_create.Result, buy_order_list?.Result);
+            Assert.True(buy_order_response_from_create.BuyOrderID != Guid.Empty);
+            Assert.Contains(buy_order_response_from_create, buy_order_list);
 
-            Assert.ThrowsAsync<ArgumentException>(() =>
-            {
-                return _stocksService.CreateBuyOrder(buyOrderRequest);
-            });
         }
         #endregion
 
@@ -138,61 +139,65 @@ namespace StockTest
             SellOrderRequest? sellOrderRequest = null;
 
             //Act
-            Assert.ThrowsAsync<ArgumentNullException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
-                return _stocksService.CreateSellOrder(sellOrderRequest);
+                _stocksService.CreateSellOrder(sellOrderRequest);
             });
         }
 
-        [Fact]
-        public void Sell_Order_Request_Quantity_Zero()
+        [Theory]
+        [InlineData(0)]
+        public void Sell_Order_Request_Quantity_Zero(uint sellOrderQuantity)
         {
             //Arrange
-            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { Quantity = 0 };
+            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { StockSymbol = "MSFT", StockName = "Microsoft", Price = 1, Quantity = sellOrderQuantity };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateSellOrder(sellOrderRequest);
+                _stocksService.CreateSellOrder(sellOrderRequest);
             });
         }
 
-        [Fact]
-        public void Sell_Order_Request_Quantity_More_Than_Limit()
+        [Theory]
+        [InlineData(100001)]
+        public void Sell_Order_Request_Quantity_More_Than_Limit(uint sellOrderQuantity)
         {
             //Arrange
-            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { Quantity = 100001 };
+            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { StockSymbol = "MSFT", StockName = "Microsoft", Price = 1, Quantity = sellOrderQuantity };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateSellOrder(sellOrderRequest);
+                _stocksService.CreateSellOrder(sellOrderRequest);
             });
         }
 
-        [Fact]
-        public void Sell_Order_Request_Price_Zero()
+        [Theory]
+        [InlineData(0)]
+        public void Sell_Order_Request_Price_Zero(uint sellOrderPrice)
         {
             //Arrange
-            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { Price = 0 };
+            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { StockSymbol = "MSFT", StockName = "Microsoft", Price = sellOrderPrice, Quantity = 1 };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateSellOrder(sellOrderRequest);
+                _stocksService.CreateSellOrder(sellOrderRequest);
             });
         }
 
-        [Fact]
-        public void Sell_Order_Request_Price_Over_Limit()
+        [Theory]
+        [InlineData(100001)]
+        public void Sell_Order_Request_Price_Over_Limit(uint sellOrderQuantity)
         {
             //Arrange
-            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { Price = 100001 };
+            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { StockSymbol = "MSFT", StockName = "Microsoft", Price = 1, Quantity = sellOrderQuantity };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateSellOrder(sellOrderRequest);
+                _stocksService.CreateSellOrder(sellOrderRequest);
             });
         }
 
@@ -200,12 +205,12 @@ namespace StockTest
         public void Sell_Order_Request_Stock_Symbol_Null()
         {
             //Arrange
-            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { StockSymbol = null };
+            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { StockSymbol = null, Price = 1, Quantity = 1 };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateSellOrder(sellOrderRequest);
+                _stocksService.CreateSellOrder(sellOrderRequest);
             });
         }
 
@@ -213,12 +218,12 @@ namespace StockTest
         public void Sell_Order_Request_Stock_Out_Of_Date()
         {
             //Arrange
-            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { DateAndTimeOfOrder = DateTime.Parse("2000-01-01") };
+            SellOrderRequest? sellOrderRequest = new SellOrderRequest() { StockSymbol = "MSFT", StockName = "Microsoft", DateAndTimeOfOrder = Convert.ToDateTime("1999-12-31"), Price = 1, Quantity = 1 };
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
-                return _stocksService.CreateSellOrder(sellOrderRequest);
+                _stocksService.CreateSellOrder(sellOrderRequest);
             });
         }
 
@@ -232,21 +237,17 @@ namespace StockTest
                 Price = 80,
                 Quantity = 3,
                 StockSymbol = "MSFT",
-                DateAndTimeOfOrder = DateTime.Parse("2000-01-01")
+                DateAndTimeOfOrder = DateTime.Parse("2024-01-01")
             };
 
             //Act
-            Task<SellOrderResponse> sell_order_response_from_create = _stocksService.CreateSellOrder(sellOrderRequest);
-            Task<List<SellOrderResponse>?> sell_order_list = _stocksService.GetSellOrders();
+            SellOrderResponse sell_order_response_from_create = _stocksService.CreateSellOrder(sellOrderRequest);
+            List<SellOrderResponse> sell_order_list = _stocksService.GetSellOrders();
 
             //Assert
-            Assert.True(sell_order_response_from_create.Result.SellOrderID != Guid.Empty);
-            Assert.Contains(sell_order_response_from_create.Result, sell_order_list?.Result);
+            Assert.True(sell_order_response_from_create.SellOrderID != Guid.Empty);
+            Assert.Contains(sell_order_response_from_create, sell_order_list);
 
-            Assert.ThrowsAsync<ArgumentException>(() =>
-            {
-                return _stocksService.CreateSellOrder(sellOrderRequest);
-            });
         }
         #endregion
 

@@ -9,7 +9,6 @@ namespace Services
     {
         private readonly List<BuyOrder> _buyOrders;
         private readonly List<SellOrder> _sellOrders;
-        private readonly IStocksService _stocksService;
 
         public StocksService()
         {
@@ -17,7 +16,7 @@ namespace Services
             _sellOrders = new List<SellOrder>();
         }
 
-        public Task<BuyOrderResponse> CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
+        public BuyOrderResponse CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
         {
             if (buyOrderRequest == null)
             {
@@ -32,10 +31,10 @@ namespace Services
 
             _buyOrders.Add(buyOrder);
 
-            return Task<buyOrder.ToBuyOrderResponse()>;
+            return buyOrder.ToBuyOrderResponse();
         }
 
-        public Task<SellOrderResponse> CreateSellOrder(SellOrderRequest? sellOrderRequest)
+        public SellOrderResponse CreateSellOrder(SellOrderRequest? sellOrderRequest)
         {
             if (sellOrderRequest == null)
             {
@@ -50,17 +49,17 @@ namespace Services
 
             _sellOrders.Add(sellOrder);
 
-            return Task < sellOrder.ToSellOrderResponse() >;
+            return sellOrder.ToSellOrderResponse();
         }
 
-        public Task<List<BuyOrderResponse>?> GetBuyOrders()
+        public List<BuyOrderResponse> GetBuyOrders()
         {
-            return _buyOrders.Select(temp => temp.ToBuyOrderResponse()).ToList();
+            return _buyOrders.OrderBy(temp => temp.DateAndTimeOfOrder).Select(temp => temp.ToBuyOrderResponse()).ToList();
         }
 
-        public Task<List<SellOrderResponse>?> GetSellOrders()
+        public List<SellOrderResponse> GetSellOrders()
         {
-            return _sellOrders.Select(temp => temp.ToSellOrderResponse()).ToList();
+            return _sellOrders.OrderBy(temp => temp.DateAndTimeOfOrder).Select(temp => temp.ToSellOrderResponse()).ToList();
         }
     }
 }

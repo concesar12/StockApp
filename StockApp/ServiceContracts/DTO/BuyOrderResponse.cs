@@ -17,7 +17,7 @@ namespace ServiceContracts.DTO
 
         public override string ToString()
         {
-            return $"Buy order Id: {BuyOrderID}, Stock Symbol: {StockSymbol}, Stock name: {StockName}, Date and time of order: {DateAndTimeOfOrder?.ToString("dd MM yyyy")}, Quantity:{Quantity}, Price: ${Price}, Trade Amount: {TradeAmount}";
+            return $"Buy order Id: {BuyOrderID}, Stock Symbol: {StockSymbol}, Stock name: {StockName}, Date and time of order: {DateAndTimeOfOrder.ToString("dd MM yyyy")}, Quantity:{Quantity}, Price: ${Price}, Trade Amount: {TradeAmount}";
         }
 
         public override bool Equals(object? obj)
@@ -47,7 +47,7 @@ namespace ServiceContracts.DTO
                 Price = buyOrder.Price,
                 DateAndTimeOfOrder = buyOrder.DateAndTimeOfOrder,
                 Quantity = buyOrder.Quantity,
-                TradeAmount = buyOrder.Price
+                TradeAmount = buyOrder.Price * buyOrder.Quantity
             };
         }
     }
