@@ -251,6 +251,7 @@ namespace StockTest
         #endregion
 
         #region GetAllBuyOrders
+
         [Fact]
         public void Get_All_Buy_Orders_Empty_List()
         {
@@ -311,6 +312,73 @@ namespace StockTest
             foreach (BuyOrderResponse buy_order_response_from_create in buy_order_responses_list_from_create)
             {
                 Assert.Contains(buy_order_response_from_create, order_responses_from_get);
+            }
+
+        }
+        #endregion
+        
+        #region GetAllSellOrders
+
+        [Fact]
+        public void Get_All_Sell_Orders_Empty_List()
+        {
+            //Act
+            List<SellOrderResponse> sell_orders_from_get = _stocksService.GetSellOrders();
+
+            //Assert
+            Assert.Empty(sell_orders_from_get);
+        }
+
+        [Fact]
+        public void Get_All_Sell_Orders_Add_Few_Orders()
+        {
+            //Arrange
+            SellOrderRequest sell_order_request_1 = new SellOrderRequest()
+            {
+                StockName = "Microsoft",
+                Price = 80,
+                Quantity = 3,
+                StockSymbol = "MSFT",
+                DateAndTimeOfOrder = DateTime.Parse("2002-01-01")
+            };
+
+            SellOrderRequest sell_order_request_2 = new SellOrderRequest()
+            {
+                StockName = "Apple",
+                Price = 10,
+                Quantity = 2,
+                StockSymbol = "APPL",
+                DateAndTimeOfOrder = DateTime.Parse("2002-01-01")
+            };
+
+            List<SellOrderRequest> sell_orders = new List<SellOrderRequest>() { sell_order_request_1, sell_order_request_2 };
+            List<SellOrderResponse> sell_order_responses_list_from_create = new List<SellOrderResponse>();
+
+            foreach (SellOrderRequest orderRequest in sell_orders)
+            {
+                SellOrderResponse sell_order_response = _stocksService.CreateSellOrder(orderRequest);
+                sell_order_responses_list_from_create.Add(sell_order_response);
+            }
+
+            _testOutputHelper.WriteLine("Expected:");
+            foreach (SellOrderResponse sell_order_from_create in sell_order_responses_list_from_create)
+            {
+                _testOutputHelper.WriteLine(sell_order_from_create.ToString());
+            }
+
+            //Act
+            List<SellOrderResponse> order_responses_from_get = _stocksService.GetSellOrders();
+
+            _testOutputHelper.WriteLine("Actual");
+            foreach (SellOrderResponse sell_order_from_get in order_responses_from_get)
+            {
+                _testOutputHelper.WriteLine(sell_order_from_get.ToString());
+            }
+
+            //Assert
+            foreach (SellOrderResponse sell_order_response_from_create in sell_order_responses_list_from_create)
+            {
+                Assert.Contains(sell_order_response_from_create, order_responses_from_get);
             }
 
         }

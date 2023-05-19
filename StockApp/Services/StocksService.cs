@@ -55,12 +55,12 @@ namespace Services
 
         public Task<List<BuyOrderResponse>?> GetBuyOrders()
         {
-            throw new NotImplementedException();
+            return _buyOrders.Select(temp => temp.ToBuyOrderResponse()).ToList();
         }
 
         public Task<List<SellOrderResponse>?> GetSellOrders()
         {
-            throw new NotImplementedException();
+            return _sellOrders.Select(temp => temp.ToSellOrderResponse()).ToList();
         }
     }
 }
