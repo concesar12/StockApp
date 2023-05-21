@@ -48,6 +48,7 @@ namespace Services
 
         public Dictionary<string, object>? GetStockPriceQuote(string stockSymbol) // This is the task that makes the request
         {
+
             using (HttpClient httpClient = _httpClientFactory.CreateClient())
             {
                 HttpRequestMessage httpRequestMessage = new HttpRequestMessage()

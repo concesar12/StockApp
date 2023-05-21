@@ -1,0 +1,12 @@
+C:\Projects\StockApp\StockApp\Entities\bin\Debug\net6.0\Entities.deps.json
+C:\Projects\StockApp\StockApp\Entities\bin\Debug\net6.0\Entities.dll
+C:\Projects\StockApp\StockApp\Entities\bin\Debug\net6.0\Entities.pdb
+C:\Projects\StockApp\StockApp\Entities\obj\Debug\net6.0\Entities.csproj.AssemblyReference.cache
+C:\Projects\StockApp\StockApp\Entities\obj\Debug\net6.0\Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\StockApp\StockApp\Entities\obj\Debug\net6.0\Entities.AssemblyInfoInputs.cache
+C:\Projects\StockApp\StockApp\Entities\obj\Debug\net6.0\Entities.AssemblyInfo.cs
+C:\Projects\StockApp\StockApp\Entities\obj\Debug\net6.0\Entities.csproj.CoreCompileInputs.cache
+C:\Projects\StockApp\StockApp\Entities\obj\Debug\net6.0\Entities.dll
+C:\Projects\StockApp\StockApp\Entities\obj\Debug\net6.0\refint\Entities.dll
+C:\Projects\StockApp\StockApp\Entities\obj\Debug\net6.0\Entities.pdb
+C:\Projects\StockApp\StockApp\Entities\obj\Debug\net6.0\ref\Entities.dll
