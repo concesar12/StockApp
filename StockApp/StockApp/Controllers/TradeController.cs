@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using StockApp.Models;
 using ServiceContracts;
+using ServiceContracts.DTO;
 
 namespace StockApp.Controllers
 {
@@ -13,6 +14,7 @@ namespace StockApp.Controllers
         private readonly IFinnhubService _finnhubService;
         private readonly IConfiguration _configuration;
         private readonly TradingOptions _tradeOptions;
+        private readonly IStocksService _stocksService;
 
 
         /// <summary>
@@ -22,12 +24,12 @@ namespace StockApp.Controllers
         /// <param name="stocksService">Injecting StocksService</param>
         /// <param name="configuration"></param>
         /// <param name="tradingOptions"></param>
-        public TradeController (IFinnhubService finnhubService, IConfiguration configuration, IOptions<TradingOptions> tradingOptions)
+        public TradeController (IFinnhubService finnhubService, IConfiguration configuration, IOptions<TradingOptions> tradingOptions, IStocksService stocksService)
         {
             _finnhubService = finnhubService;
             _tradeOptions = tradingOptions.Value;
             _configuration = configuration;
-
+            _stocksService = stocksService;
         }
 
         [Route("/")]
@@ -51,6 +53,7 @@ namespace StockApp.Controllers
                 {
                     StockSymbol = Convert.ToString(responseDictionaryProfile["ticker"]),
                     StockName = Convert.ToString(responseDictionaryProfile["name"]),
+                    Quantity = _tradeOptions.DefaultOrderQuantity ?? 0,
                     Price = Convert.ToDouble(responseDictionaryQuote["c"].ToString())
                 };
             }
@@ -58,6 +61,69 @@ namespace StockApp.Controllers
             //Send Finnhub token to view
             ViewBag.FinnhubToken = _configuration["FinnhubToken"];
             return View(stock);
+        }
+
+        [Route("[action]")]
+        public IActionResult Orders()
+        {
+            //invoke service methods
+            List<BuyOrderResponse> buyOrderResponses = _stocksService.GetBuyOrders();
+            List<SellOrderResponse> sellOrderResponses = _stocksService.GetSellOrders();
+
+            //Create model object
+            Orders orders = new Orders() { BuyOrders = buyOrderResponses, SellOrders = sellOrderResponses };
+
+            //Now add in the viewbag the options read to the view
+            ViewBag.TradingOptions = _tradeOptions;
+            
+            return View(orders);
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        public IActionResult SellOrder(SellOrderRequest sellOrderRequest)
+        {
+            //update date of order
+            sellOrderRequest.DateAndTimeOfOrder = DateTime.Now;
+
+            //re-validate the model object after updating the date
+            ModelState.Clear(); // This is usefull to clear up previous scenarios with failures
+            TryValidateModel(sellOrderRequest);
+
+            //If there anything wrong
+            if(!ModelState.IsValid)
+            {
+                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                StockTrade stockTrade = new StockTrade() { StockName = sellOrderRequest.StockName, StockSymbol = sellOrderRequest.StockSymbol, Quantity = sellOrderRequest.Quantity };
+                return View("Index", stockTrade);
+            }
+
+            //Invoke service method
+            SellOrderResponse sellOrderResponse = _stocksService.CreateSellOrder(sellOrderRequest);
+
+            return RedirectToAction(nameof(Orders));
+        }
+
+        [Route("[action]")]
+        public IActionResult BuyOrder(BuyOrderRequest buyOrderRequest)
+        {
+            //Update time of order
+            buyOrderRequest.DateAndTimeOfOrder = DateTime.Now;
+
+            //Re-validate the model
+            ModelState.Clear();
+            TryValidateModel(buyOrderRequest);
+            
+            if(!ModelState.IsValid)
+            {
+                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                StockTrade stockTrade = new StockTrade() { StockSymbol = buyOrderRequest.StockSymbol, StockName = buyOrderRequest.StockName, Quantity = buyOrderRequest.Quantity };
+                return View("Index", stockTrade);
+            }
+
+            BuyOrderResponse buyOrderResponse = _stocksService.CreateBuyOrder(buyOrderRequest);
+
+            return RedirectToAction(nameof(Orders));
         }
     }
 }
