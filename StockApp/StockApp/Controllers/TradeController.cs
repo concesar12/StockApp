@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using StockApp.Models;
 using ServiceContracts;
 using ServiceContracts.DTO;
+using Rotativa.AspNetCore;
 
 namespace StockApp.Controllers
 {
@@ -35,15 +36,15 @@ namespace StockApp.Controllers
         [Route("/")]
         [Route("[action]")] // specifies that the action method can be accessed using a URL that matches the name of the action method. 
         [Route("~/[controller]")] //  specifies that the controller can be accessed using a URL that matches the name of the controller, but with a leading tilde (~) character.
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //reset stock symbol if not exists
             if (string.IsNullOrEmpty(_tradeOptions.DefaultStockSymbol))
                 _tradeOptions.DefaultStockSymbol = "MSFT";
 
             //We use in this way to be ablo to change the type the stock we want dynamically
-            Dictionary<string, object>? responseDictionaryQuote = _finnhubService.GetStockPriceQuote(_tradeOptions.DefaultStockSymbol); // get stock price quotes from API server
-            Dictionary<string, object>? responseDictionaryProfile = _finnhubService.GetCompanyProfile(_tradeOptions.DefaultStockSymbol); // get company profile from API server
+            Dictionary<string, object>? responseDictionaryQuote = await _finnhubService.GetStockPriceQuote(_tradeOptions.DefaultStockSymbol); // get stock price quotes from API server
+            Dictionary<string, object>? responseDictionaryProfile = await _finnhubService.GetCompanyProfile(_tradeOptions.DefaultStockSymbol); // get company profile from API server
             StockTrade stock = new StockTrade() { StockSymbol = _tradeOptions.DefaultStockSymbol};
 
             //Load data from finnHubService into model object
@@ -64,11 +65,11 @@ namespace StockApp.Controllers
         }
 
         [Route("[action]")]
-        public IActionResult Orders()
+        public async Task<IActionResult> Orders()
         {
             //invoke service methods
-            List<BuyOrderResponse> buyOrderResponses = _stocksService.GetBuyOrders();
-            List<SellOrderResponse> sellOrderResponses = _stocksService.GetSellOrders();
+            List<BuyOrderResponse> buyOrderResponses = await _stocksService.GetBuyOrders();
+            List<SellOrderResponse> sellOrderResponses = await _stocksService.GetSellOrders();
 
             //Create model object
             Orders orders = new Orders() { BuyOrders = buyOrderResponses, SellOrders = sellOrderResponses };
@@ -81,7 +82,7 @@ namespace StockApp.Controllers
 
         [Route("[action]")]
         [HttpPost]
-        public IActionResult SellOrder(SellOrderRequest sellOrderRequest)
+        public async Task<IActionResult> SellOrder(SellOrderRequest sellOrderRequest)
         {
             //update date of order
             sellOrderRequest.DateAndTimeOfOrder = DateTime.Now;
@@ -99,13 +100,13 @@ namespace StockApp.Controllers
             }
 
             //Invoke service method
-            SellOrderResponse sellOrderResponse = _stocksService.CreateSellOrder(sellOrderRequest);
+            SellOrderResponse sellOrderResponse = await _stocksService.CreateSellOrder(sellOrderRequest);
 
             return RedirectToAction(nameof(Orders));
         }
 
         [Route("[action]")]
-        public IActionResult BuyOrder(BuyOrderRequest buyOrderRequest)
+        public async Task<IActionResult> BuyOrder(BuyOrderRequest buyOrderRequest)
         {
             //Update time of order
             buyOrderRequest.DateAndTimeOfOrder = DateTime.Now;
@@ -121,9 +122,30 @@ namespace StockApp.Controllers
                 return View("Index", stockTrade);
             }
 
-            BuyOrderResponse buyOrderResponse = _stocksService.CreateBuyOrder(buyOrderRequest);
+            BuyOrderResponse buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
 
             return RedirectToAction(nameof(Orders));
+        }
+
+        [Route("[action]")]
+        public async Task<IActionResult> TradesPDF()
+        {
+            //get list of buys and sells orders
+            List<IOrderResponse> orders = new List<IOrderResponse>();
+            orders.AddRange(await _stocksService.GetBuyOrders());
+            orders.AddRange(await _stocksService.GetSellOrders());
+            orders = orders.OrderByDescending(temp => temp.DateAndTimeOfOrder).ToList();
+
+            ViewBag.TradingOptions = _tradeOptions;
+
+            //Return view as pdf
+            return new ViewAsPdf("TradesPDF", orders, ViewData)
+            {
+                PageMargins = new Rotativa.AspNetCore.Options.Margins() { Top = 20, Right = 20, Bottom = 20, Left = 20 },
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
+            };
+
+            return View(orders);
         }
     }
 }

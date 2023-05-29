@@ -3,15 +3,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ServiceContracts.DTO
 {
-    public class SellOrderResponse
+    public class SellOrderResponse :IOrderResponse
     {
         public Guid SellOrderID { get; set; }
         public string? StockSymbol { get; set; }
         [Required(ErrorMessage = "Stock Name can't be null or empty")]
         public string? StockName { get; set; }
         public DateTime DateAndTimeOfOrder { get; set; }
-        public uint? Quantity { get; set; }
+        public uint Quantity { get; set; }
         public double Price { get; set; }
+        public OrderType TypeOfOrder => OrderType.SellOrder;
         public double TradeAmount { get; set; }
 
         public override string ToString()

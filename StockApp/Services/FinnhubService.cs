@@ -16,7 +16,7 @@ namespace Services
             _configuration = configuration;
         }
 
-        public Dictionary<string, object>? GetCompanyProfile(string stockSymbol)
+        public async Task<Dictionary<string, object>?> GetCompanyProfile(string stockSymbol)
         {
             //by using using, we ensure that the HttpClient instance is disposed of correctly and efficiently,
             //and that any unmanaged resources it has created are released. This helps to prevent potential issues such as memory leaks or socket exhaustion.
@@ -28,7 +28,7 @@ namespace Services
                     Method = HttpMethod.Get
                 };
 
-                HttpResponseMessage httpResponseMessage = httpClient.Send(httpRequestMessage);
+                HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
 
                 Stream stream = httpResponseMessage.Content.ReadAsStream();
 
@@ -46,7 +46,7 @@ namespace Services
             }
         }
 
-        public Dictionary<string, object>? GetStockPriceQuote(string stockSymbol) // This is the task that makes the request
+        public async Task<Dictionary<string, object>?> GetStockPriceQuote(string stockSymbol) // This is the task that makes the request
         {
 
             using (HttpClient httpClient = _httpClientFactory.CreateClient())
@@ -57,14 +57,17 @@ namespace Services
                     Method = HttpMethod.Get
                 };
 
-                HttpResponseMessage httpResponseMessage = httpClient.Send(httpRequestMessage); //This is to receive the message
+                HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage); //This is to receive the message
 
-                Stream stream = httpResponseMessage.Content.ReadAsStream(); // This is to create the stream to read it
+                //Stream stream = httpResponseMessage.Content.ReadAsStream(); // This is to create the stream to read it
 
-                StreamReader streamReader = new StreamReader(stream); //This is to actual read the message from response body
+                //StreamReader streamReader = new StreamReader(stream); //This is to actual read the message from response body
 
-                string response = streamReader.ReadToEnd(); //We read into a string the stream
-                Dictionary<string, object>? responseDictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(response); // We are converting what we get in response into a dictionary 
+                string responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+                //string response = streamReader.ReadToEnd(); //We read into a string the stream
+
+                Dictionary<string, object>? responseDictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(responseBody); // We are converting what we get in response into a dictionary 
                 if (responseDictionary == null) // In case it fails
                     throw new InvalidOperationException("No response from finnhub server");
 
