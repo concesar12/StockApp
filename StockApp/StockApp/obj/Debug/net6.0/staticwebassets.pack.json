@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\Rotativa\\wkhtmltopdf.exe",
+      "PackagePath": "staticwebassets\\Rotativa\\wkhtmltopdf.exe"
+    },
+    {
       "Id": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\Scripts\\FinnhubScript.js",
       "PackagePath": "staticwebassets\\Scripts\\FinnhubScript.js"
     },

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ServiceContracts.DTO
 {
-    public class BuyOrderResponse
+    public class BuyOrderResponse : IOrderResponse
     {
         public Guid BuyOrderID { get; set; }
         public string StockSymbol { get; set; }
@@ -12,6 +12,7 @@ namespace ServiceContracts.DTO
         public DateTime DateAndTimeOfOrder { get; set; }
         public uint Quantity { get; set; }
         public double Price { get; set; }
+        public OrderType TypeOfOrder => OrderType.BuyOrder;
         public double TradeAmount { get; set; }
 
 
