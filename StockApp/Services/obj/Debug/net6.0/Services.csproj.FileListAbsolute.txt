@@ -1,8 +1,12 @@
 C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\Services.deps.json
 C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\Services.dll
 C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\Services.pdb
+C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\Entities.dll
+C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\RepositoryContracts.dll
 C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\ServiceContracts.dll
+C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\RepositoryContracts.pdb
 C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\ServiceContracts.pdb
+C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\Entities.pdb
 C:\Projects\StockApp\StockApp\Services\obj\Debug\net6.0\Services.csproj.AssemblyReference.cache
 C:\Projects\StockApp\StockApp\Services\obj\Debug\net6.0\Services.GeneratedMSBuildEditorConfig.editorconfig
 C:\Projects\StockApp\StockApp\Services\obj\Debug\net6.0\Services.AssemblyInfoInputs.cache
@@ -13,5 +17,3 @@ C:\Projects\StockApp\StockApp\Services\obj\Debug\net6.0\Services.dll
 C:\Projects\StockApp\StockApp\Services\obj\Debug\net6.0\refint\Services.dll
 C:\Projects\StockApp\StockApp\Services\obj\Debug\net6.0\Services.pdb
 C:\Projects\StockApp\StockApp\Services\obj\Debug\net6.0\ref\Services.dll
-C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\Entities.dll
-C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\Entities.pdb

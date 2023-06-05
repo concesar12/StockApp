@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "v7jd6civz1c7228dnMxE3rIzQwB1++dYQEzET8/Vn0Y=",
+  "Hash": "DldgAp2aGB4MudyFE+ZEBbWbMlPBEXKhATJnA5GbKX0=",
   "Source": "StockApp",
   "BasePath": "_content/StockApp",
   "Mode": "Default",
@@ -32,6 +32,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Rotativa\\wkhtmltopdf.exe"
+    },
+    {
+      "Identity": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\Scripts\\ChartScript.js",
+      "SourceId": "StockApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\",
+      "BasePath": "_content/StockApp",
+      "RelativePath": "Scripts/ChartScript.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Scripts\\ChartScript.js"
     },
     {
       "Identity": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\Scripts\\FinnhubScript.js",

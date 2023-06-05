@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\Rotativa\\wkhtmltopdf.exe"
     },
     {
+      "Id": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\Scripts\\ChartScript.js",
+      "PackagePath": "staticwebassets\\Scripts\\ChartScript.js"
+    },
+    {
       "Id": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\Scripts\\FinnhubScript.js",
       "PackagePath": "staticwebassets\\Scripts\\FinnhubScript.js"
     },

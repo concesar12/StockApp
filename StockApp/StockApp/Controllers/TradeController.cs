@@ -33,35 +33,34 @@ namespace StockApp.Controllers
             _stocksService = stocksService;
         }
 
-        [Route("/")]
-        [Route("[action]")] // specifies that the action method can be accessed using a URL that matches the name of the action method. 
-        [Route("~/[controller]")] //  specifies that the controller can be accessed using a URL that matches the name of the controller, but with a leading tilde (~) character.
-        public async Task<IActionResult> Index()
+        [Route("[action]/{stockSymbol}")] // specifies that the action method can be accessed using a URL that matches the name of the action method. 
+        [Route("~/[controller]/{stockSymbol}")] //  specifies that the controller can be accessed using a URL that matches the name of the controller, but with a leading tilde (~) character.
+        public async Task<IActionResult> Index(string stockSymbol)
         {
             //reset stock symbol if not exists
-            if (string.IsNullOrEmpty(_tradeOptions.DefaultStockSymbol))
-                _tradeOptions.DefaultStockSymbol = "MSFT";
+            if (string.IsNullOrEmpty(stockSymbol))
+                stockSymbol = "MSFT";
 
-            //We use in this way to be ablo to change the type the stock we want dynamically
-            Dictionary<string, object>? responseDictionaryQuote = await _finnhubService.GetStockPriceQuote(_tradeOptions.DefaultStockSymbol); // get stock price quotes from API server
-            Dictionary<string, object>? responseDictionaryProfile = await _finnhubService.GetCompanyProfile(_tradeOptions.DefaultStockSymbol); // get company profile from API server
-            StockTrade stock = new StockTrade() { StockSymbol = _tradeOptions.DefaultStockSymbol};
+            //get company profile from API server
+            Dictionary<string, object>? companyProfileDictionary = await _finnhubService.GetCompanyProfile(stockSymbol);
 
-            //Load data from finnHubService into model object
-            if (responseDictionaryQuote != null && responseDictionaryProfile != null)
+            //get stock price quotes from API server
+            Dictionary<string, object>? stockQuoteDictionary = await _finnhubService.GetStockPriceQuote(stockSymbol);
+
+
+            //create model object
+            StockTrade stockTrade = new StockTrade() { StockSymbol = stockSymbol };
+
+            //load data from finnHubService into model object
+            if (companyProfileDictionary != null && stockQuoteDictionary != null)
             {
-                stock = new StockTrade()
-                {
-                    StockSymbol = Convert.ToString(responseDictionaryProfile["ticker"]),
-                    StockName = Convert.ToString(responseDictionaryProfile["name"]),
-                    Quantity = _tradeOptions.DefaultOrderQuantity ?? 0,
-                    Price = Convert.ToDouble(responseDictionaryQuote["c"].ToString())
-                };
+                stockTrade = new StockTrade() { StockSymbol = companyProfileDictionary["ticker"].ToString(), StockName = companyProfileDictionary["name"].ToString(), Quantity = _tradeOptions.DefaultOrderQuantity ?? 0, Price = Convert.ToDouble(stockQuoteDictionary["c"].ToString()) };
             }
 
             //Send Finnhub token to view
             ViewBag.FinnhubToken = _configuration["FinnhubToken"];
-            return View(stock);
+
+            return View(stockTrade);
         }
 
         [Route("[action]")]
@@ -106,6 +105,7 @@ namespace StockApp.Controllers
         }
 
         [Route("[action]")]
+        [HttpPost]
         public async Task<IActionResult> BuyOrder(BuyOrderRequest buyOrderRequest)
         {
             //Update time of order
@@ -144,8 +144,6 @@ namespace StockApp.Controllers
                 PageMargins = new Rotativa.AspNetCore.Options.Margins() { Top = 20, Right = 20, Bottom = 20, Left = 20 },
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
             };
-
-            return View(orders);
         }
     }
 }

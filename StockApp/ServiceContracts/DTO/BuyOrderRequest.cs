@@ -12,9 +12,9 @@ namespace ServiceContracts.DTO
         [Required(ErrorMessage = "Stock name can't be e,pty")]
         public string StockName { get; set; }
         public DateTime DateAndTimeOfOrder { get; set; }
-        [Range(0, 100000, ErrorMessage = "{0} should be between {1} and ${2}")]
+        [Range(1, 100000, ErrorMessage = "{0} should be between {1} and ${2}")]
         public uint Quantity { get; set; }
-        [Range(0, 100000, ErrorMessage = "{0} should be between {1} and ${2}")]
+        [Range(1, 100000, ErrorMessage = "{0} should be between {1} and ${2}")]
         public double Price { get; set; }
 
         public BuyOrder ToBuyOrder()
