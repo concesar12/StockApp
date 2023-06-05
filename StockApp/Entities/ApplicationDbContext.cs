@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class StockMarketDbContext :DbContext
+    public class ApplicationDbContext :DbContext
     {
-        public StockMarketDbContext(DbContextOptions options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         public DbSet<BuyOrder> BuyOrders { get; set; }
         public DbSet<SellOrder> SellOrders { get; set; }
