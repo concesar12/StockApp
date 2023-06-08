@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using System.Text.Json; //for API response
 using RepositoryContracts;
+using Microsoft.Extensions.Logging;
 
 namespace Services
 {
@@ -10,10 +11,12 @@ namespace Services
     {
         //Add finnhub repository
         private readonly IFinnhubRepository _finnhubRepository;
-
+        //Adding logger in here
+        private readonly ILogger<FinnhubService> _logger;
         //Contructor finnhub repository
-        public FinnhubService(IFinnhubRepository finnhubRepository)
+        public FinnhubService(IFinnhubRepository finnhubRepository, ILogger<FinnhubService> logger)
         {
+            _logger = logger;
             _finnhubRepository = finnhubRepository;
         }
 
@@ -36,6 +39,7 @@ namespace Services
 
         public async Task<List<Dictionary<string, string>>?> GetStocks()
         {
+            _logger.LogInformation("This is entering the getstocks method in finhub service");
             List<Dictionary<string, string>>? responseListStocks = await _finnhubRepository.GetStocks();
             return responseListStocks;
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RepositoryContracts;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,15 @@ namespace Repositories
         //Adding the http client to call the API in Finnhub
         private readonly IHttpClientFactory _httpClientFactory;
 
+        //Adding logging
+        private readonly ILogger<FinnhubRepository> _logger;
+
         //Creating constructor to initialize properties
-        public FinnhubRepository(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public FinnhubRepository(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<FinnhubRepository> logger)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<Dictionary<string, object>?> GetCompanyProfile(string stockSymbol)
@@ -87,6 +92,8 @@ namespace Repositories
 
         public async Task<List<Dictionary<string, string>>?> GetStocks()
         {
+            //Adding logs
+            _logger.LogInformation("This is the start of get stocks repository");
             //Create http client
             HttpClient httpClient = _httpClientFactory.CreateClient();
             //Create http request
