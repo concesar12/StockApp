@@ -12,6 +12,8 @@ namespace StockApp.Controllers
         private readonly TradingOptions _tradingOptions;
         //Bring Finnhub service to call the methods
         private readonly IFinnhubService _finnhubService;
+        //Bring logs to live in here
+        private readonly ILogger<StocksController> _logger;
 
         /// <summary>
         /// Constructor for TradeController that executes when a new object is created for the class
@@ -19,12 +21,14 @@ namespace StockApp.Controllers
         /// <param name="tradingOptions">Injecting TradeOptions config through Options pattern</param>
         /// <param name="finnhubService">Injecting FinnhubService</param>
         /// 
-        public StocksController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService)
+        public StocksController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService, ILogger<StocksController> logger)
         {
             //Initialize trading options
             _tradingOptions = tradingOptions.Value;
             //Initialize finnhubService
             _finnhubService = finnhubService;
+            //Initialize logger
+            _logger = logger;
         }
 
         [Route("/")]
@@ -32,6 +36,8 @@ namespace StockApp.Controllers
         [Route("~/[action]/{stock?}")]
         public async Task<IActionResult> Explore(string? stock, bool showAll = false)
         {
+            //Log information in the controller
+            _logger.LogInformation($"Entering to the explorer controller values: stock: {stock}, showall: {showAll}");
             //get company profile from API server
             List<Dictionary<string, string>>? stockDictionary = await _finnhubService.GetStocks();
 
