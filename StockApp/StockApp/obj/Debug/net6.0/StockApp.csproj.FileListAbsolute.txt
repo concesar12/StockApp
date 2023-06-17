@@ -108,3 +108,5 @@ C:\Projects\StockApp\StockApp\StockApp\bin\Debug\net6.0\Serilog.Sinks.Seq.dll
 C:\Projects\StockApp\StockApp\StockApp\bin\Debug\net6.0\System.Text.Encodings.Web.dll
 C:\Projects\StockApp\StockApp\StockApp\bin\Debug\net6.0\System.Text.Json.dll
 C:\Projects\StockApp\StockApp\StockApp\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
+C:\Projects\StockApp\StockApp\StockApp\bin\Debug\net6.0\Exceptions.dll
+C:\Projects\StockApp\StockApp\StockApp\bin\Debug\net6.0\Exceptions.pdb

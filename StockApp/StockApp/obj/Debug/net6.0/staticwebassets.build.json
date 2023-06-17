@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "DldgAp2aGB4MudyFE+ZEBbWbMlPBEXKhATJnA5GbKX0=",
+  "Hash": "uEcoEHZ//OZOWFYaNi0pmZIgPJ8WsDbj+P7mM4acVIY=",
   "Source": "StockApp",
   "BasePath": "_content/StockApp",
   "Mode": "Default",
@@ -16,6 +16,23 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\error.svg",
+      "SourceId": "StockApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\",
+      "BasePath": "_content/StockApp",
+      "RelativePath": "error.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\error.svg"
+    },
     {
       "Identity": "C:\\Projects\\StockApp\\StockApp\\StockApp\\wwwroot\\Rotativa\\wkhtmltopdf.exe",
       "SourceId": "StockApp",

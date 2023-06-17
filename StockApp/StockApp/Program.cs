@@ -6,6 +6,7 @@ using Serilog;
 using ServiceContracts;
 using Services;
 using StockApp;
+using StockApp.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,8 +41,20 @@ builder.Services.AddHttpLogging(options =>
 
 //Adding Http client
 builder.Services.AddHttpClient();
+//builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
 var app = builder.Build();
+
+if (builder.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    //This is created for any kind of error in runtime
+    app.UseExceptionHandler("/Error");
+    app.UseExceptionHandlingMiddleware();
+}
 
 //Enable http logging
 app.UseHttpLogging();

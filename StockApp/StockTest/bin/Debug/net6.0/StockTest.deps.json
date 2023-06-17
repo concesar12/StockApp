@@ -3009,6 +3009,14 @@
           "Entities.dll": {}
         }
       },
+      "Exceptions/1.0.0": {
+        "runtime": {
+          "Exceptions.dll": {}
+        },
+        "compile": {
+          "Exceptions.dll": {}
+        }
+      },
       "Repositories/1.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
@@ -3046,6 +3054,7 @@
       },
       "Services/1.0.0": {
         "dependencies": {
+          "Exceptions": "1.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
           "Microsoft.Extensions.Http": "6.0.0",
           "RepositoryContracts": "1.0.0",
@@ -3060,6 +3069,7 @@
       },
       "StockApp/1.0.0": {
         "dependencies": {
+          "Exceptions": "1.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.16",
           "Repositories": "1.0.0",
           "RepositoryContracts": "1.0.0",
@@ -6387,6 +6397,11 @@
       "hashPath": "xunit.runner.visualstudio.2.4.5.nupkg.sha512"
     },
     "Entities/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Exceptions/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -17,3 +17,5 @@ C:\Projects\StockApp\StockApp\Services\obj\Debug\net6.0\Services.dll
 C:\Projects\StockApp\StockApp\Services\obj\Debug\net6.0\refint\Services.dll
 C:\Projects\StockApp\StockApp\Services\obj\Debug\net6.0\Services.pdb
 C:\Projects\StockApp\StockApp\Services\obj\Debug\net6.0\ref\Services.dll
+C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\Exceptions.dll
+C:\Projects\StockApp\StockApp\Services\bin\Debug\net6.0\Exceptions.pdb
