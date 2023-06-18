@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using ServiceContracts;
+using ServiceContracts.FinnhubService;
 using StockApp;
 using StockApp.Controllers;
 using StockApp.Models;
@@ -20,8 +20,8 @@ namespace StockTest.ControllerTests
 {
     public class StocksControllerTest
     {
-        private readonly IFinnhubService _finnhubService;
-        private readonly Mock<IFinnhubService> _finnhubServiceMock;
+        private readonly IFinnhubStocksService _finnhubService;
+        private readonly Mock<IFinnhubStocksService> _finnhubServiceMock;
         private readonly ILogger<StocksController> _logger;
 
         private readonly Mock<ILogger<StocksController>> _loggerMock;
@@ -31,7 +31,7 @@ namespace StockTest.ControllerTests
         {
             _fixture = new Fixture();
 
-            _finnhubServiceMock = new Mock<IFinnhubService>();
+            _finnhubServiceMock = new Mock<IFinnhubStocksService>();
             _loggerMock =new Mock<ILogger<StocksController>>();
 
             _finnhubService = _finnhubServiceMock.Object;

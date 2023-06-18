@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using StockApp.Models;
-using ServiceContracts;
 using ServiceContracts.DTO;
 using Rotativa.AspNetCore;
 using StockApp.Filters.ActionFilters;
+using ServiceContracts.FinnhubService;
+using ServiceContracts.StocksService;
 
 namespace StockApp.Controllers
 {
@@ -13,11 +14,13 @@ namespace StockApp.Controllers
     [Route("[controller]")]
     public class TradeController : Controller
     {
-        private readonly IFinnhubService _finnhubService;
         private readonly IConfiguration _configuration;
         private readonly TradingOptions _tradeOptions;
-        private readonly IStocksService _stocksService;
-
+        private readonly IBuyOrdersService _stocksBuyOrdersService;
+        private readonly ISellOrdersService _stocksSellOrdersService;
+        private readonly IFinnhubSearchStocksService _finnhubSeachStocksService;
+        private readonly IFinnhubCompanyProfileService _finnhubCompanyProfileService;
+        private readonly IFinnhubStockPriceQuoteService _finnhubStockPriceQuoteService;
 
         /// <summary>
         /// Constructor for TradeController that executes when a new object is created for the class
@@ -26,12 +29,22 @@ namespace StockApp.Controllers
         /// <param name="stocksService">Injecting StocksService</param>
         /// <param name="configuration"></param>
         /// <param name="tradingOptions"></param>
-        public TradeController (IFinnhubService finnhubService, IConfiguration configuration, IOptions<TradingOptions> tradingOptions, IStocksService stocksService)
+        public TradeController (IOptions<TradingOptions> tradingOptions,
+            IBuyOrdersService stocksBuyOrdersService,
+            ISellOrdersService stocksSellOrdersService,
+            IFinnhubSearchStocksService finnhubSearchStocksService,
+            IFinnhubCompanyProfileService finnhubCompanyProfileService,
+            IFinnhubStockPriceQuoteService finnhubStockPriceQuoteService,
+            IConfiguration configuration
+            )
         {
-            _finnhubService = finnhubService;
             _tradeOptions = tradingOptions.Value;
             _configuration = configuration;
-            _stocksService = stocksService;
+            _stocksBuyOrdersService = stocksBuyOrdersService;
+            _stocksSellOrdersService = stocksSellOrdersService;
+            _finnhubSeachStocksService = finnhubSearchStocksService;
+            _finnhubCompanyProfileService = finnhubCompanyProfileService;
+            _finnhubStockPriceQuoteService = finnhubStockPriceQuoteService;
         }
 
         [Route("[action]/{stockSymbol}")] // specifies that the action method can be accessed using a URL that matches the name of the action method. 
@@ -43,10 +56,10 @@ namespace StockApp.Controllers
                 stockSymbol = "MSFT";
 
             //get company profile from API server
-            Dictionary<string, object>? companyProfileDictionary = await _finnhubService.GetCompanyProfile(stockSymbol);
+            Dictionary<string, object>? companyProfileDictionary = await _finnhubCompanyProfileService.GetCompanyProfile(stockSymbol);
 
             //get stock price quotes from API server
-            Dictionary<string, object>? stockQuoteDictionary = await _finnhubService.GetStockPriceQuote(stockSymbol);
+            Dictionary<string, object>? stockQuoteDictionary = await _finnhubStockPriceQuoteService.GetStockPriceQuote(stockSymbol);
 
 
             //create model object
@@ -68,8 +81,8 @@ namespace StockApp.Controllers
         public async Task<IActionResult> Orders()
         {
             //invoke service methods
-            List<BuyOrderResponse> buyOrderResponses = await _stocksService.GetBuyOrders();
-            List<SellOrderResponse> sellOrderResponses = await _stocksService.GetSellOrders();
+            List<BuyOrderResponse> buyOrderResponses = await _stocksBuyOrdersService.GetBuyOrders();
+            List<SellOrderResponse> sellOrderResponses = await _stocksSellOrdersService.GetSellOrders();
 
             //Create model object
             Orders orders = new Orders() { BuyOrders = buyOrderResponses, SellOrders = sellOrderResponses };
@@ -87,7 +100,7 @@ namespace StockApp.Controllers
         public async Task<IActionResult> SellOrder(SellOrderRequest sellOrderRequest)
         {
             //Invoke service method
-            SellOrderResponse sellOrderResponse = await _stocksService.CreateSellOrder(sellOrderRequest);
+            SellOrderResponse sellOrderResponse = await _stocksSellOrdersService.CreateSellOrder(sellOrderRequest);
 
             return RedirectToAction(nameof(Orders));
         }
@@ -95,11 +108,26 @@ namespace StockApp.Controllers
         [Route("[action]")]
         [HttpPost]
         //Filter for model validation
-        [TypeFilter(typeof(CreateOrderActionFilter))]
+        //[TypeFilter(typeof(CreateOrderActionFilter))]
         public async Task<IActionResult> BuyOrder(BuyOrderRequest buyOrderRequest)
         {
+            //update date of order
+            buyOrderRequest.DateAndTimeOfOrder = DateTime.Now;
+
+            //re-validate the model object after updating the date
+            ModelState.Clear();
+            TryValidateModel(buyOrderRequest);
+
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                StockTrade stockTrade = new StockTrade() { StockName = buyOrderRequest.StockName, Quantity = buyOrderRequest.Quantity, StockSymbol = buyOrderRequest.StockSymbol };
+                return View("Index", stockTrade);
+            }
+
             //Invoke service method
-            BuyOrderResponse buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
+            BuyOrderResponse buyOrderResponse = await _stocksBuyOrdersService.CreateBuyOrder(buyOrderRequest);
 
             return RedirectToAction(nameof(Orders));
         }
@@ -109,8 +137,8 @@ namespace StockApp.Controllers
         {
             //get list of buys and sells orders
             List<IOrderResponse> orders = new List<IOrderResponse>();
-            orders.AddRange(await _stocksService.GetBuyOrders());
-            orders.AddRange(await _stocksService.GetSellOrders());
+            orders.AddRange(await _stocksBuyOrdersService.GetBuyOrders());
+            orders.AddRange(await _stocksSellOrdersService.GetSellOrders());
             orders = orders.OrderByDescending(temp => temp.DateAndTimeOfOrder).ToList();
 
             ViewBag.TradingOptions = _tradeOptions;

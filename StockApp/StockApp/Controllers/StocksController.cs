@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using ServiceContracts;
+using ServiceContracts.FinnhubService;
 using StockApp.Models;
 
 namespace StockApp.Controllers
@@ -11,7 +11,7 @@ namespace StockApp.Controllers
         //Bring the app json options to have the stocks
         private readonly TradingOptions _tradingOptions;
         //Bring Finnhub service to call the methods
-        private readonly IFinnhubService _finnhubService;
+        private readonly IFinnhubStocksService _finnhubService;
         //Bring logs to live in here
         private readonly ILogger<StocksController> _logger;
 
@@ -21,7 +21,7 @@ namespace StockApp.Controllers
         /// <param name="tradingOptions">Injecting TradeOptions config through Options pattern</param>
         /// <param name="finnhubService">Injecting FinnhubService</param>
         /// 
-        public StocksController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService, ILogger<StocksController> logger)
+        public StocksController(IOptions<TradingOptions> tradingOptions, IFinnhubStocksService finnhubService, ILogger<StocksController> logger)
         {
             //Initialize trading options
             _tradingOptions = tradingOptions.Value;

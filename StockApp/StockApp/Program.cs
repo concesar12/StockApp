@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Repositories;
 using RepositoryContracts;
 using Serilog;
-using ServiceContracts;
-using Services;
+using ServiceContracts.FinnhubService;
+using ServiceContracts.StocksService;
+using Services.FinnhubService;
+using Services.StocksService;
 using StockApp;
 using StockApp.Middleware;
 
@@ -23,8 +25,12 @@ builder.Services.AddControllersWithViews();
 builder.Services.Configure<TradingOptions>(builder.Configuration.GetSection("TradingOptions"));
 
 //add services into IoC container
-builder.Services.AddScoped<IStocksService, StocksService>();
-builder.Services.AddScoped<IFinnhubService, FinnhubService>();
+builder.Services.AddTransient<IBuyOrdersService, StocksBuyOrdersService>();
+builder.Services.AddTransient<ISellOrdersService, StocksSellOrdersService>();
+builder.Services.AddTransient<IFinnhubCompanyProfileService, FinnhubCompanyProfileService>();
+builder.Services.AddTransient<IFinnhubStockPriceQuoteService, FinnhubStockPriceQuoteService>();
+builder.Services.AddTransient<IFinnhubStocksService, FinnhubStocksService>();
+builder.Services.AddTransient<IFinnhubSearchStocksService, FinnhubSearchStocksService>();
 builder.Services.AddScoped<IStocksRepository, StocksRepository>();
 builder.Services.AddScoped<IFinnhubRepository, FinnhubRepository>();
 
